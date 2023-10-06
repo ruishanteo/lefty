@@ -1,7 +1,13 @@
 import { View } from "react-native";
 import { IconButton, Text, useTheme } from "react-native-paper";
 
-export default function Layout({ iconName, onAction, title, children }) {
+export default function Layout({
+  iconName,
+  onAction,
+  actionDisabled,
+  title,
+  children,
+}) {
   const theme = useTheme();
   return (
     <>
@@ -18,6 +24,7 @@ export default function Layout({ iconName, onAction, title, children }) {
           style={{ position: "absolute", left: 0 }}
           icon={iconName}
           onPress={onAction}
+          disabled={actionDisabled}
         />
 
         <Text
