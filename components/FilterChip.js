@@ -1,8 +1,10 @@
 import React from "react";
+import { useTheme } from "react-native-paper";
 import { Chip } from "@rneui/themed";
 import { useFormikContext } from "formik";
 
 export const FilterChip = ({ filterProp, chip }) => {
+  const theme = useTheme();
   const { setFieldValue, values } = useFormikContext();
 
   const isChipPressed = filterProp.allowMultiple
@@ -27,6 +29,11 @@ export const FilterChip = ({ filterProp, chip }) => {
       title={chip.display}
       onPress={handlePress}
       type={isChipPressed ? "solid" : "outline"}
+      buttonStyle={{
+        backgroundColor: isChipPressed ? theme.colors.tertiary : "transparent",
+        borderColor: theme.colors.primary,
+      }}
+      titleStyle={{ color: theme.colors.primary }}
     />
   );
 };
