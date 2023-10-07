@@ -10,7 +10,6 @@ import { useAppTheme } from "./providers/hooks.js";
 import { AxiosProvider } from "./providers/AxiosProvider";
 import { NotificationProvider } from "./providers/NotificationProvider.js";
 import { ThemeProvider } from "./providers/ThemeProvider";
-import { QueryProvider } from "./providers/QueryProvider.js";
 import { BottomNav } from "./components/BottomNav.js";
 
 async function cacheFonts(fonts) {
@@ -65,9 +64,7 @@ export default function App() {
     <ThemeProvider>
       <NotificationProvider>
         <AxiosProvider>
-          <QueryProvider>
-            <GetRoutes />
-          </QueryProvider>
+          <GetRoutes />
         </AxiosProvider>
       </NotificationProvider>
     </ThemeProvider>
