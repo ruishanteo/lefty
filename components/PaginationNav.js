@@ -1,5 +1,5 @@
-import { View, Text } from "react-native";
-import { IconButton } from "react-native-paper";
+import { View } from "react-native";
+import { IconButton, Text } from "react-native-paper";
 
 function PaginationNav({ currentPageNumber, goToPage, maxPageNumber }) {
   const deltaPage = (delta) => goToPage(parseInt(currentPageNumber) + delta);

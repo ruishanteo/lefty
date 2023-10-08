@@ -11,6 +11,7 @@ import { Home } from "../pages/Home";
 import { Settings } from "../pages/Settings";
 import { AboutLefty } from "../subpages/AboutLefty";
 import { CameraScan } from "../subpages/CameraScan";
+import { CameraLanding } from "../subpages/CameraLanding";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -97,6 +98,11 @@ export function BottomNav() {
       <Stack.Screen
         name="Camera"
         component={CameraScan}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="CameraLanding"
+        component={CameraLanding}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
