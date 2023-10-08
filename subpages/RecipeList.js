@@ -6,18 +6,39 @@ import { Formik } from "formik";
 
 import { FilterAccordian } from "../components/FilterAccordian";
 import { Listing } from "../components/Listing";
-import { LoadingIcon } from "../components/LoadingIcon";
 import Layout from "../components/Layout";
 import PaginationNav from "../components/PaginationNav";
 
 const itemsPerPage = 10;
+const sortingFuncs = {
+  missingIngredientsDesc: (a, b) =>
+    b.missedIngredientCount - a.missedIngredientCount,
+  missingIngredientsAsc: (a, b) =>
+    a.missedIngredientCount - b.missedIngredientCount,
+  usedIngredientsDesc: (a, b) => b.usedIngredientCount - a.usedIngredientCount,
+  usedIngredientsAsc: (a, b) => a.usedIngredientCount - b.usedIngredientCount,
+};
 const filterProps = [
   {
     type: "orderBy",
     label: "Sort",
     chips: [
-      { display: "Missing ingredients", value: "missingIngredients" },
-      { display: "Used ingredients", value: "usedIngredients" },
+      {
+        display: "Ingredients Needed - High to Low",
+        value: "missingIngredientsDesc",
+      },
+      {
+        display: "Ingredients Needed - Low to High",
+        value: "missingIngredientsAsc",
+      },
+      {
+        display: "Ingredients Match - High to Low",
+        value: "usedIngredientsDesc",
+      },
+      {
+        display: "Ingredients Match - Low to High",
+        value: "usedIngredientsAsc",
+      },
     ],
     allowMultiple: false,
   },
@@ -100,7 +121,7 @@ const initialValues = {
   dishType: [],
   cuisines: [],
   diet: [],
-  page: 0,
+  page: 1,
 };
 
 function getFilteredListings(listings, values) {
@@ -130,21 +151,17 @@ function getFilteredListings(listings, values) {
     );
   }
 
-  if (values.orderBy === "missingIngredients") {
-    filteredListings.sort(
-      (a, b) => a.missedIngredientCount - b.missedIngredientCount
-    );
-  } else if (values.orderBy === "usedIngredients") {
-    filteredListings.sort(
-      (a, b) => a.usedIngredientCount - b.usedIngredientCount
-    );
+  if (values.orderBy) {
+    filteredListings.sort(sortingFuncs[values.orderBy]);
   }
 
-  const startIndex = values.page * itemsPerPage;
+  const startIndex = (values.page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  filteredListings = filteredListings.slice(startIndex, endIndex);
 
-  return filteredListings;
+  return {
+    filteredListings: filteredListings.slice(startIndex, endIndex),
+    totalItems: filteredListings.length,
+  };
 }
 
 export function RecipeList({ navigation, route }) {
@@ -173,8 +190,10 @@ export function RecipeList({ navigation, route }) {
         touched,
         errors,
       }) => {
-        const filteredListings = getFilteredListings(listings, values);
-        const totalItems = filteredListings.length;
+        const { filteredListings, totalItems } = getFilteredListings(
+          listings,
+          values
+        );
         const maxPageNumber = Math.ceil(totalItems / itemsPerPage);
 
         return (
@@ -239,7 +258,7 @@ export function RecipeList({ navigation, route }) {
                 ) : (
                   <FlatList
                     data={filteredListings}
-                    style={{ height: "83%" }}
+                    style={{ height: "83%", width: "100%" }}
                     renderItem={({ item }) => (
                       <Listing navigation={navigation} listing={item} />
                     )}
@@ -251,10 +270,15 @@ export function RecipeList({ navigation, route }) {
                     columnWrapperStyle={{
                       justifyContent: "space-between",
                     }}
+                    contentContainerStyle={{ flexGrow: 1 }}
+                    ListFooterComponentStyle={{
+                      flex: 1,
+                      justifyContent: "flex-end",
+                    }}
                     ListFooterComponent={
                       <PaginationNav
                         goToPage={(p) => setFieldValue("page", p)}
-                        currentPageNumber={values.page + 1}
+                        currentPageNumber={values.page}
                         maxPageNumber={maxPageNumber}
                       />
                     }
@@ -266,7 +290,7 @@ export function RecipeList({ navigation, route }) {
                           fontWeight: "bold",
                         }}
                       >
-                        RECIPES FOUND
+                        DISCOVER RECIPES
                       </Text>
                     }
                   />
