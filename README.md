@@ -71,3 +71,7 @@ This app is designed to help you find the recipes by scanning the ingredients yo
 &nbsp;
 
 </p>
+
+## Other Links
+- [**Video Demo**](https://www.youtube.com/watch?v=F4D22NqRaVY)
+- [**Backend Repo**](https://github.com/ruishanteo/lefty-backend)
